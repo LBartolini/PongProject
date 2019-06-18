@@ -1,6 +1,6 @@
 import numpy as np
 
-np.random.seed(400)
+np.random.seed(300)
 
 #seed 60
 
