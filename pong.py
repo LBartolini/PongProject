@@ -41,8 +41,8 @@ ball.shape("square")
 ball.color("white")
 ball.penup()
 ball.goto(0, 0)
-ball.dx = 2
-ball.dy = 2
+ball.dx = 4
+ball.dy = 4
 
 # Pen
 pen = turtle.Turtle()
@@ -83,7 +83,7 @@ def paddle_b_down():
 #wn.onkeypress(paddle_b_down, "Down")
 
 
-def game(a_up, a_down, hit):
+def game(a_up, a_down, hit, visualize=False):
     global score_b, score_a
 
     if a_up: paddle_a_up()
@@ -103,18 +103,24 @@ def game(a_up, a_down, hit):
         ball.sety(-290)
         ball.dy *= -1
 
+    if paddle_a.ycor() > 290:
+        paddle_a.sety(290)
+    
+    elif paddle_a.ycor() < -290:
+        paddle_a.sety(-290)
+
     # Left and right
     if ball.xcor() > 350:
         score_a += 1
         flag = True
-        #pen.write("Player A: {}  Player B: {}".format(score_a, score_b), align="center", font=("Courier", 24, "normal"))
+        if visualize: pen.write("Player A: {}  Player B: {}".format(score_a, score_b), align="center", font=("Courier", 24, "normal"))
         ball.goto(0, 0)
         ball.dx *= -1
 
     elif ball.xcor() < -350:
         score_b += 1
         flag = True
-        #pen.write("Player A: {}  Player B: {}".format(score_a, score_b), align="center", font=("Courier", 24, "normal"))
+        if visualize: pen.write("Player A: {}  Player B: {}".format(score_a, score_b), align="center", font=("Courier", 24, "normal"))
         ball.goto(0, 0)
         ball.dx *= -1
 
@@ -126,9 +132,10 @@ def game(a_up, a_down, hit):
     elif ball.xcor() > 340 and ball.ycor() < paddle_b.ycor() + 400 and ball.ycor() > paddle_b.ycor() - 400:
         ball.dx *= -1
 
-    #pen.write("Epoch : {}".format(epoch), align="center", font=("Courier", 12, "normal"))
-    #pen.clear()
-
+    
+    if visualize: 
+        wn.update()
+        pen.clear()
     delta_x = paddle_a.xcor() - ball.xcor()
     delta_y = paddle_a.ycor() - ball.ycor()
 
