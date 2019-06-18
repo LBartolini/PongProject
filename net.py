@@ -1,6 +1,6 @@
 import numpy as np
 
-np.random.seed(300)
+np.random.seed(0)
 
 #seed 60
 
@@ -8,17 +8,25 @@ def sigmoid(x):
 	out = 1 / (1+np.exp(-x))
 	return out
 
-class Network(object):
-	def __init__(self, shape):
-		self.shape = shape
+def tanh(x):
+	out = (np.exp(x) - np.exp(-x)) / (np.exp(x) + np.exp(-x))
+	return out
 
+class Network(object):
+	def __init__(self, shape, weights_path=None):
+		self.shape = shape
 		self.weights = []
+		self.bias = []
+		
 		for i in range(len(self.shape)-1):
 			self.weights.append(np.random.uniform(-1, 1, (self.shape[i], self.shape[i+1])))
+			
+			for i in range(len(self.shape)-1):
+				self.bias.append(np.random.uniform(-1, 1, self.shape[i+1]))
 
-		self.bias = []
-		for i in range(len(self.shape)-1):
-			self.bias.append(np.random.uniform(-1, 1, self.shape[i+1]))
+		if weights_path:
+			temp = np.genfromtxt(weights_path, delimiter=" ")
+			self._import(temp)
 
 		self.layers = []
 		for i in range(len(self.shape)):
@@ -43,7 +51,7 @@ class Network(object):
 			for k in i:
 				vect.append(k) 
 
-		return vect
+		return np.array(vect)
 
 	def _import(self, vect):
 		s = 0
