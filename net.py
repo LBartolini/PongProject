@@ -21,8 +21,8 @@ class Network(object):
 		for i in range(len(self.shape)-1):
 			self.weights.append(np.random.uniform(-1, 1, (self.shape[i], self.shape[i+1])))
 			
-			for i in range(len(self.shape)-1):
-				self.bias.append(np.random.uniform(-1, 1, self.shape[i+1]))
+		for i in range(len(self.shape)-1):
+			self.bias.append(np.random.uniform(-1, 1, self.shape[i+1]))
 
 		if weights_path:
 			temp = np.genfromtxt(weights_path, delimiter=" ")
@@ -36,7 +36,7 @@ class Network(object):
 		self.layers[0] = inputs
 		for i in range(len(self.shape)-1):
 			self.layers[i+1] = np.dot(self.layers[i], self.weights[i])
-			self.layers[i+1] = self.layers[i+1] + (self.bias[i]/10)
+			self.layers[i+1] = self.layers[i+1] + (self.bias[i])
 			self.layers[i+1] = sigmoid(self.layers[i+1])
 
 		return self.layers[len(self.layers)-1]

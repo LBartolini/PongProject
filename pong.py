@@ -23,7 +23,7 @@ paddle_a = turtle.Turtle()
 paddle_a.speed(0)
 paddle_a.shape("square")
 paddle_a.color("green")
-paddle_a.shapesize(stretch_wid=10,stretch_len=1)
+paddle_a.shapesize(stretch_wid=7,stretch_len=1)
 paddle_a.penup()
 paddle_a.goto(-350, 0)
 
@@ -44,7 +44,7 @@ ball.color("white")
 ball.penup()
 ball.goto(0, 0)
 ball.dx = 6
-ball.dy = 6 * np.random.uniform(-1, 1)
+ball.dy = 6 * np.random.uniform(0.5, 1)
 
 # Pen
 pen = turtle.Turtle()
@@ -134,7 +134,7 @@ def game(a_up, a_down, hit, visualize=False, player=False):
     if ball.xcor() > 355:
         score_a += 1
         flag = True
-        ball.dy = 6 * np.random.uniform(-1, 1)
+        ball.dy = 6 * np.random.uniform(0.5, 1)
         ball.goto(0, 0)
         paddle_a.goto(-350, 0)
         #paddle_b.goto(350, 0)
@@ -144,7 +144,7 @@ def game(a_up, a_down, hit, visualize=False, player=False):
     elif ball.xcor() < -355:
         score_b += 1
         flag = True
-        ball.dy = 6 * np.random.uniform(-1, 1)
+        ball.dy = 6 * np.random.uniform(0.5, 1)
         ball.goto(0, 0)
         paddle_a.goto(-350, 0)
         #paddle_b.goto(350, 0)
@@ -152,17 +152,21 @@ def game(a_up, a_down, hit, visualize=False, player=False):
         #ball.dy = abs(ball.dy)
 
     # Paddle and ball collisions
-    if ball.xcor() < -340 and ball.ycor() < paddle_a.ycor() + collision_a and ball.ycor() > paddle_a.ycor() - collision_a:
+    if ball.dx<0 and ball.xcor() < -350 and ball.ycor() < paddle_a.ycor() + collision_a and ball.ycor() > paddle_a.ycor() - collision_a:
         ball.dx *= -1 
+        ball.dy = ball.dy * np.random.uniform(1, 1.1)
         hit += 1
     
-    elif ball.xcor() > 340 and ball.ycor() < paddle_b.ycor() + collision_b and ball.ycor() > paddle_b.ycor() - collision_b:
+    elif ball.dx>0 and ball.xcor() > 350 and ball.ycor() < paddle_b.ycor() + collision_b and ball.ycor() > paddle_b.ycor() - collision_b:
         ball.dx *= -1 
+        ball.dy = ball.dy * np.random.uniform(1, 1.1)
 
     if visualize: 
         wn.update()
         pen.clear()
     delta_x = paddle_a.xcor() - ball.xcor()
     delta_y = paddle_a.ycor() - ball.ycor()
+    ball_bottom = 290 - ball.ycor()
+    ball_top = -290 -ball.ycor()
 
-    return flag, delta_x, delta_y, hit
+    return flag, delta_x/100, delta_y/100, ball.ycor()/100, ball.dx/4, ball.dy/4, hit
