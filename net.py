@@ -8,6 +8,12 @@ def sigmoid(x):
 	out = 1 / (1+np.exp(-x))
 	return out
 
+def relu(x):
+	out = x
+	out[out<-1] = -1
+	out[out> -1 and out < 0] = 0
+	return out
+
 def tanh(x):
 	out = (np.exp(x) - np.exp(-x)) / (np.exp(x) + np.exp(-x))
 	return out
@@ -37,9 +43,14 @@ class Network(object):
 		for i in range(len(self.shape)-1):
 			self.layers[i+1] = np.dot(self.layers[i], self.weights[i])
 			self.layers[i+1] = self.layers[i+1] + (self.bias[i])
+			'''
+			if i != len(self.shape)-2:
+				self.layers[i+1] = sigmoid(self.layers[i+1])
+			else:
+				self.layers[i+1] = relu(self.layers[i+1])
+			'''
 			self.layers[i+1] = sigmoid(self.layers[i+1])
-
-		return self.layers[len(self.layers)-1]
+			return self.layers[len(self.layers)-1]
 
 	def export(self):
 		vect = []

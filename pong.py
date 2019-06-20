@@ -23,7 +23,7 @@ paddle_a = turtle.Turtle()
 paddle_a.speed(0)
 paddle_a.shape("square")
 paddle_a.color("green")
-paddle_a.shapesize(stretch_wid=7,stretch_len=1)
+paddle_a.shapesize(stretch_wid=15,stretch_len=1)
 paddle_a.penup()
 paddle_a.goto(-350, 0)
 
@@ -92,14 +92,14 @@ def game(a_up, a_down, hit, visualize=False, player=False):
         wn.listen()
         wn.onkeypress(paddle_b_up, "Up")
         wn.onkeypress(paddle_b_down, "Down")
-        paddle_b.shapesize(stretch_wid=7,stretch_len=1)
+        paddle_b.shapesize(stretch_wid=5,stretch_len=1)
         pen.write(f"Computer : {score_a} Player : {score_b}", align='center', font=('Courier', 24, 'normal'))
         collision_b = 100
     else:
         paddle_b.shapesize(stretch_wid=40,stretch_len=1)
         collision_b = 400
 
-    collision_a = 70
+    collision_a = 150
 
     if a_up: paddle_a_up()
     if a_down: paddle_a_down()
