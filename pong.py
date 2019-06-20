@@ -7,6 +7,7 @@ import os
 import time
 import random as r
 import numpy as np
+import random as r
 
 wn = turtle.Screen()
 wn.title("Pong")
@@ -19,8 +20,8 @@ score_a = 0
 score_b = 0
 
 # Paddle A
-collision_a = 70
-collision_b = 70
+collision_a = 30
+collision_b = 30
 
 
 paddle_a = turtle.Turtle()
@@ -47,8 +48,8 @@ ball.shape("square")
 ball.color("white")
 ball.penup()
 ball.goto(0, 0)
-ball.dx = 8
-ball.dy = 8 * np.random.uniform(-1, 1)
+ball.dx = 8 * r.choice([1, -1])
+ball.dy = 8 * r.choice([np.random.uniform(-1, -0.5), np.random.uniform(1, 0.5)])
 
 # Pen
 pen = turtle.Turtle()
@@ -56,6 +57,7 @@ pen.speed(0)
 pen.shape("square")
 pen.color("white")
 pen.penup()
+
 pen.hideturtle()
 pen.goto(0, 260)
 #pen.write("Player A: 0  Player B: 0", align="center", font=("Courier", 24, "normal"))
@@ -63,22 +65,22 @@ pen.goto(0, 260)
 # Functions
 def paddle_a_up():
     y = paddle_a.ycor()
-    y += 4
+    y += 10
     paddle_a.sety(y)
 
 def paddle_a_down():
     y = paddle_a.ycor()
-    y -= 4
+    y -= 10
     paddle_a.sety(y)
 
 def paddle_b_up():
     y = paddle_b.ycor()
-    y += 4
+    y += 10
     paddle_b.sety(y)
 
 def paddle_b_down():
     y = paddle_b.ycor()
-    y -= 4
+    y -= 10
     paddle_b.sety(y)
 
 # Keyboard bindings
@@ -125,26 +127,31 @@ def game(a_up, a_down, b_up, b_down):
     # Left and right
     if ball.xcor() > 355:
         score_a += 1
-        ball.dy = 6 * np.random.uniform(-1, 1)
+        ball.dx *= -1 
+        ball.dy = 8 * r.choice([np.random.uniform(-1, -0.5), np.random.uniform(1, 0.5)])
         ball.goto(0, 0)
         paddle_a.goto(-350, 0)
         paddle_b.goto(350, 0)
 
     elif ball.xcor() < -355:
         score_b += 1
-        ball.dy = 6 * np.random.uniform(-1, 1)
+        ball.dx *= -1 
+        ball.dy = 8 * r.choice([np.random.uniform(-1, -0.5), np.random.uniform(1, 0.5)])
         ball.goto(0, 0)
         paddle_a.goto(-350, 0)
         paddle_b.goto(350, 0)
 
+    
+
     # Paddle and ball collisions
-    if ball.dx<0 and ball.xcor() < -350 and ball.ycor() < paddle_a.ycor() + collision_a and ball.ycor() > paddle_a.ycor() - collision_a:
+    if ball.dx<0 and ball.xcor() < -345 and ball.ycor() < paddle_a.ycor() + collision_a and ball.ycor() > paddle_a.ycor() - collision_a:
         ball.dx *= -1 
         ball.dy = ball.dy * np.random.uniform(1, 1.05)
     
-    elif ball.dx>0 and ball.xcor() > 350 and ball.ycor() < paddle_b.ycor() + collision_b and ball.ycor() > paddle_b.ycor() - collision_b:
+    elif ball.dx>0 and ball.xcor() > 345 and ball.ycor() < paddle_b.ycor() + collision_b and ball.ycor() > paddle_b.ycor() - collision_b:
         ball.dx *= -1 
         ball.dy = ball.dy * np.random.uniform(1, 1.05)
+
     wn.update()
     pen.clear()
     delta_x_a = paddle_a.xcor() - ball.xcor()

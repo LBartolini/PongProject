@@ -1,5 +1,5 @@
 import net
-from pong import game
+from pong_copy import game
 import time
 import random as r
 import numpy as np
@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 popolation = []
 GENOME_SIZE = 50
 for i in range(GENOME_SIZE):
-    popolation.append(net.Network([5, 5, 4, 3, 1]))#, weights_path=f"Saves_little/save_{i}.txt"))
+    popolation.append(net.Network([5, 3, 1], weights_path=f"Saves_little_02/save_{i}.txt"))
 
 def log_change(best_five):
     vectors = []
@@ -25,8 +25,7 @@ def log_change(best_five):
     return np.array(vectors)    
 
 best = 0
-#a = net.Network([2, 3, 2], weights_path="best.txt")
-epochs = 100
+epochs = 30
 
 std_all = []
 mean_all = []
@@ -71,14 +70,14 @@ for epoch in range(epochs):
     hits_mean_evolution.append(np.mean(best_10_hits))
     hits_std_evolution.append(np.std(best_10_hits))
 
-    np.array(hits_std_evolution).tofile("std_543_01.txt", sep=" ")
-    np.array(hits_mean_evolution).tofile("mean_543_01.txt", sep=" ")
+    #np.array(hits_std_evolution).tofile("std_543_01.txt", sep=" ")
+    #np.array(hits_mean_evolution).tofile("mean_543_01.txt", sep=" ")
     
     print(f'Epoch {epoch}: {hits_mean_evolution[-1]:.2f} +/- {hits_std_evolution[-1]:.2f}')
 
     for i, c in enumerate(popolation):  
-        c.export().tofile(f"Saves_little/save_{i}.txt", sep=" ")
-    winner_genome.export().tofile("Saves_little/best.txt", sep=" ")
+        c.export().tofile(f"Saves_little_04/save_{i}.txt", sep=" ")
+    winner_genome.export().tofile("Saves_little_04/best.txt", sep=" ")
 
 if True:
     input('START GAME')

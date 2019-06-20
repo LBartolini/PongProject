@@ -19,7 +19,7 @@ score_a = 0
 score_b = 0
 
 # Paddle A
-collision_a = 70
+collision_a = 30
 
 
 paddle_a = turtle.Turtle()
@@ -46,8 +46,8 @@ ball.shape("square")
 ball.color("white")
 ball.penup()
 ball.goto(0, 0)
-ball.dx = 6
-ball.dy = 6 * np.random.uniform(-1, 1)
+ball.dx = 8
+ball.dy = 8 * r.choice([np.random.uniform(-1, -0.5), np.random.uniform(1, 0.5)])
 
 # Pen
 pen = turtle.Turtle()
