@@ -20,7 +20,6 @@ score_b = 0
 
 # Paddle A
 collision_a = 70
-collision_b = 70
 
 
 paddle_a = turtle.Turtle()
@@ -36,7 +35,7 @@ paddle_b = turtle.Turtle()
 paddle_b.speed(0)
 paddle_b.shape("square")
 paddle_b.color("red")
-paddle_b.shapesize(stretch_wid=int(collision_b/10),stretch_len=1)
+paddle_b.shapesize(stretch_wid=40,stretch_len=1)
 paddle_b.penup()
 paddle_b.goto(350, 0)
 
@@ -47,8 +46,8 @@ ball.shape("square")
 ball.color("white")
 ball.penup()
 ball.goto(0, 0)
-ball.dx = 8
-ball.dy = 8 * np.random.uniform(-1, 1)
+ball.dx = 6
+ball.dy = 6 * np.random.uniform(-1, 1)
 
 # Pen
 pen = turtle.Turtle()
@@ -63,22 +62,22 @@ pen.goto(0, 260)
 # Functions
 def paddle_a_up():
     y = paddle_a.ycor()
-    y += 4
+    y += 5
     paddle_a.sety(y)
 
 def paddle_a_down():
     y = paddle_a.ycor()
-    y -= 4
+    y -= 5
     paddle_a.sety(y)
 
 def paddle_b_up():
     y = paddle_b.ycor()
-    y += 4
+    y += 40
     paddle_b.sety(y)
 
 def paddle_b_down():
     y = paddle_b.ycor()
-    y -= 4
+    y -= 40
     paddle_b.sety(y)
 
 # Keyboard bindings
@@ -89,17 +88,28 @@ def paddle_b_down():
 #wn.onkeypress(paddle_b_down, "Down")
 
 
-def game(a_up, a_down, b_up, b_down):
-    global score_b, score_a, collision_a, collision_b
+def game(a_up, a_down, hit, visualize=False, player=False):
+    global score_b, score_a, collision_a
+
+    if player:
+        wn.listen()
+        wn.onkeypress(paddle_b_up, "Up")
+        wn.onkeypress(paddle_b_down, "Down")
+        paddle_b.shapesize(stretch_wid=5,stretch_len=1)
+        pen.write(f"Computer : {score_a} Player : {score_b}", align='center', font=('Courier', 24, 'normal'))
+        collision_b = 100
+    else:
+        paddle_b.shapesize(stretch_wid=40,stretch_len=1)
+        collision_b = 400
+
 
     if a_up: paddle_a_up()
     if a_down: paddle_a_down()
-    if b_up: paddle_b_up()
-    if b_down: paddle_b_down()
-    pen.write(f"Player A: {score_a} Player B: {score_b}", align="center", font=("Courier", 24, "normal"))
+
     # Move the ball
     ball.setx(ball.xcor() + ball.dx)
     ball.sety(ball.ycor() + ball.dy)
+    flag = False
     # Border checking
     # Top and bottom
     if ball.ycor() > 290:
@@ -125,33 +135,40 @@ def game(a_up, a_down, b_up, b_down):
     # Left and right
     if ball.xcor() > 355:
         score_a += 1
+        flag = True
         ball.dy = 6 * np.random.uniform(-1, 1)
         ball.goto(0, 0)
         paddle_a.goto(-350, 0)
-        paddle_b.goto(350, 0)
+        #paddle_b.goto(350, 0)
+        ball.dx = abs(ball.dx)
+        #ball.dy = abs(ball.dy)
 
     elif ball.xcor() < -355:
         score_b += 1
+        flag = True
         ball.dy = 6 * np.random.uniform(-1, 1)
         ball.goto(0, 0)
         paddle_a.goto(-350, 0)
-        paddle_b.goto(350, 0)
+        #paddle_b.goto(350, 0)
+        ball.dx = abs(ball.dx)
+        #ball.dy = abs(ball.dy)
 
     # Paddle and ball collisions
     if ball.dx<0 and ball.xcor() < -350 and ball.ycor() < paddle_a.ycor() + collision_a and ball.ycor() > paddle_a.ycor() - collision_a:
         ball.dx *= -1 
         ball.dy = ball.dy * np.random.uniform(1, 1.05)
+        hit += 1
     
     elif ball.dx>0 and ball.xcor() > 350 and ball.ycor() < paddle_b.ycor() + collision_b and ball.ycor() > paddle_b.ycor() - collision_b:
         ball.dx *= -1 
         ball.dy = ball.dy * np.random.uniform(1, 1.05)
-    wn.update()
-    pen.clear()
-    delta_x_a = paddle_a.xcor() - ball.xcor()
-    delta_y_a = paddle_a.ycor() - ball.ycor()
-    delta_x_b = paddle_b.xcor() - ball.xcor()
-    delta_y_b = paddle_b.ycor() - ball.ycor()
+
+    if visualize: 
+        wn.update()
+        pen.clear()
+    delta_x = paddle_a.xcor() - ball.xcor()
+    delta_y = paddle_a.ycor() - ball.ycor()
     ball_bottom = 290 - ball.ycor()
     ball_top = -290 -ball.ycor()
 
-    return delta_x_a/100, delta_y_a/100, delta_x_b/100, delta_y_b/100, ball.ycor()/100, ball.dx/4, ball.dy/4
+    return flag, delta_x/100, delta_y/100, ball.ycor()/100, ball.dx/4, ball.dy/4, hit
