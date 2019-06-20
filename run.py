@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 popolation = []
 GENOME_SIZE = 50
 for i in range(GENOME_SIZE):
-    popolation.append(net.Network([5, 5, 3, 1]))#, weights_path=f"Saves_little/save_{i}.txt"))
+    popolation.append(net.Network([5, 5, 4, 3, 1]))#, weights_path=f"Saves_little/save_{i}.txt"))
 
 def log_change(best_five):
     vectors = []
@@ -71,8 +71,8 @@ for epoch in range(epochs):
     hits_mean_evolution.append(np.mean(best_10_hits))
     hits_std_evolution.append(np.std(best_10_hits))
 
-    np.array(hits_std_evolution).tofile("std_53_01.txt", sep=" ")
-    np.array(hits_mean_evolution).tofile("mean_53_01.txt", sep=" ")
+    np.array(hits_std_evolution).tofile("std_543_01.txt", sep=" ")
+    np.array(hits_mean_evolution).tofile("mean_543_01.txt", sep=" ")
     
     print(f'Epoch {epoch}: {hits_mean_evolution[-1]:.2f} +/- {hits_std_evolution[-1]:.2f}')
 
